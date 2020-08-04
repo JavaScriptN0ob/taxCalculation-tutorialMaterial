@@ -10,7 +10,11 @@
 -- | $180,001 and over  |     45%    | $54,096 plus 45% of amounts over $180,000 |
 --------------------------------------------------------------------------------*/
 
-const taxTable2019 = [
+// Readable, Maintainable, Reuseable
+
+// SOLID
+
+const TAX_TABLE_2019 = [
   {
     minIncome: 0,
     maxIncome: 18200,
@@ -48,85 +52,32 @@ const taxTable2019 = [
   }
 ];
 
-function taxTableValidation(taxTable) {
-  for (let i = 0; i < taxTable.length - 1; i++) {
-    if (taxTable[i].maxIncome !== taxTable[i + 1].minIncome) {
-      return 'tax table is invalid'
-    }
-  }
+// input index, table
+const getTaxConfig = (index, table) => {
+  const taxConfig = table[index];
+  const { minIncome, rate, base, message } = taxConfig;
+
+  return { minIncome, rate, base, message };
 }
 
-function taxPaid(income, taxTable) {
-  // if (income < 0) {
-  //   throw new Error('Invalid income input')
-  // }
+function calculateTax(income, taxTable) {
+  const getTaxConfigInRange = (config) => income > config.minIncome && income <= config.maxIncome;
+  const taxConfigIndex = taxTable.findIndex(getTaxConfigInRange);
 
-  // if (taxTableValidation(taxTable)) {
-  //   taxTableValidation(taxTable)
-  // }
-
-  const taxTableIndex = taxTable.findIndex((obj) => income <= obj.maxIncome);
-  if (taxTableIndex === -1) {
-    throw new Error('Can not find the tax threshold corresponding to Income');
+  if (taxConfigIndex === -1) {
+    throw new Error('Can not find the tax config corresponding to Income');
   }
-  else if (taxTableIndex !== -1) {
-    let taxUse = taxTable[taxTableIndex];
-    const incomeAfterTax = (income - taxUse.minIncome) * taxUse.rate + taxUse.base;
-    const message = taxUse.message;
-    const rate = taxUse.rate * 100;
 
-    return {
-      tax: incomeAfterTax, 
-      message: message, 
-      rate: rate
-    };
+  const  { minIncome, rate, base, message } = getTaxConfig();
+  
+  const taxPayable = (income - minIncome) * rate + base;
+
+  return {
+    taxPayable, 
+    message, 
+    rate,
   };
-
-  /*
-    Above code is using to replace the for loop at the bottom
-
-    1. Declarative VS Imperative 
-        findIndex  vs  for loop
-    2. Variables using -- let in the for loop
-  */
-
-  // for (let i = 0; i < taxTable.length; i++) {
-  //   let tax = taxTable[i];
-  //   if (income > tax.maxIncome) {
-  //     continue;
-  //   };
-
-  //   const incomeAfterTax = (income - tax.minIncome) * tax.rate + tax.base;
-  //   const message = tax.message;
-  //   const rate = tax.rate * 100;
-  //   return {
-  //     tax: incomeAfterTax, 
-  //     message: message, 
-  //     rate: rate
-  //   };
-  // };
 };
 
-
-function afterTaxIncome(income, taxTable) {
-  return {
-    income: income - taxPaid(income, taxTable).tax
-  };
-}
-
-console.log(taxPaid(18200, taxTable2019))
-console.log(afterTaxIncome(18200, taxTable2019))
-console.log(taxPaid(18201, taxTable2019))
-console.log(afterTaxIncome(18201, taxTable2019))
-console.log(taxPaid(37000, taxTable2019))
-console.log(afterTaxIncome(37000, taxTable2019))
-console.log(taxPaid(37001, taxTable2019))
-console.log(afterTaxIncome(37001, taxTable2019))
-console.log(taxPaid(90000, taxTable2019))
-console.log(afterTaxIncome(90000, taxTable2019))
-console.log(taxPaid(90001, taxTable2019))
-console.log(afterTaxIncome(90001, taxTable2019))
-console.log(taxPaid(180000, taxTable2019))
-console.log(afterTaxIncome(180000, taxTable2019))
-console.log(taxPaid(180001, taxTable2019))
-console.log(afterTaxIncome(180001, taxTable2019))
+const taxPayableWhen2019 = calculateTax(200000, TAX_TABLE_2019);
+const taxPayableWhen2016 = calculateTax(120000, TAX_TABLE_2016);
