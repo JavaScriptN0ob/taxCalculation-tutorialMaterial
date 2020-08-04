@@ -58,15 +58,18 @@ function taxTableValidation(taxTable) {
 
 function taxPaid(income, taxTable) {
   // if (income < 0) {
-  //   return 'error'
+  //   throw new Error('Invalid income input')
   // }
 
   // if (taxTableValidation(taxTable)) {
   //   taxTableValidation(taxTable)
   // }
 
-  const taxTableIndex = taxTable.findIndex((obj) => income <= obj.maxIncome)
-  if (taxTableIndex !== -1) {
+  const taxTableIndex = taxTable.findIndex((obj) => income <= obj.maxIncome);
+  if (taxTableIndex === -1) {
+    throw new Error('Can not find the tax threshold corresponding to Income');
+  }
+  else if (taxTableIndex !== -1) {
     let taxUse = taxTable[taxTableIndex];
     const incomeAfterTax = (income - taxUse.minIncome) * taxUse.rate + taxUse.base;
     const message = taxUse.message;
@@ -77,8 +80,15 @@ function taxPaid(income, taxTable) {
       message: message, 
       rate: rate
     };
-  }
+  };
 
+  /*
+    Above code is using to replace the for loop at the bottom
+
+    1. Declarative VS Imperative 
+        findIndex  vs  for loop
+    2. Variables using -- let in the for loop
+  */
 
   // for (let i = 0; i < taxTable.length; i++) {
   //   let tax = taxTable[i];
