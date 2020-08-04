@@ -10,4 +10,4 @@ This is a simple tax calculation function demo for using during the class teachi
 - [ ] I — Interface segregation principle
 - [x] D - Dependency inversion principle<br><br>
 
-### Another important part is better thinking and coding in<br> :thumbsup:`declarative` logics compared to :-1:~~`imperative`~~, also using **less variables** in the codes, too.
+### Another important part is better thinking and coding in<br> :thumbsup:`declarative` logics compared to :-1:~~`imperative`~~, also using :clap:`**less variables**` in the codes, too.
