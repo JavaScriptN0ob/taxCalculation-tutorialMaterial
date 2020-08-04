@@ -9,3 +9,5 @@ Important part is always keep in mind of **[SOLID principles](https://itnext.io/
 - [ ] L — Liskov substitution principle
 - [ ] I — Interface segregation principle
 - [x] D - Dependency inversion principle
+<br><br>
+Another important part is better thinking and coding in **declarative** logics compared to ~~imperative~~, also using **less variables** in the codes, too.
